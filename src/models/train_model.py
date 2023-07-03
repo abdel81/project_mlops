@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from urllib.parse import urlparse
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score,recall_score,accuracy_score,precision_score,confusion_matrix,classification_report
+from sklearn.metrics import f1_score, recall_score, accuracy_score, precision_score, confusion_matrix, classification_report
 
 def read_params(config_path):
     """
