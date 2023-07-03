@@ -15,16 +15,16 @@ processed_data_config:
 
 mlflow_config:
   artifacts_dir: artifacts
-  experiment_name: model_iteration2
+  experiment_name: model_iteration1
   run_name: random_forest
   registered_model_name: random_forest_model
   remote_server_uri: http://localhost:1234
  
 random_forest: 
-  max_depth: 7
-  n_estimators: 25
+  max_depth: 10
+  n_estimators: 30
 
-model_dir: src/models/model.joblib
+model_dir: models/model.joblib
 
 model_webapp_dir: webapp/model_webapp_dir/model.joblib
 
