@@ -1,44 +1,31 @@
-import yaml
+import os
 import argparse
-import pandas as pd 
+import pandas as pd
+from load_data import read_params
+from sklearn.model_selection import train_test_split
 
-def read_params(config_path):
-    """
-    read parameters from the params.yaml file
-    input: params.yaml location
-    output: parameters as dictionary
-    """
-    with open(config_path) as yaml_file:
-        config = yaml.safe_load(yaml_file)
-    return config
+def split_data(df,train_data_path,test_data_path,split_ratio,random_state):
+    train, test = train_test_split(df, test_size=split_ratio, random_state=random_state)
+    train.to_csv(train_data_path, sep=",", index=False, encoding="utf-8")
+    test.to_csv(test_data_path, sep=",", index=False, encoding="utf-8")    
 
-def load_data(data_path,model_var):
+def split_and_saved_data(config_path):
     """
-    load csv dataset from given path
-    input: csv path 
-    output:pandas dataframe 
-    note: Only 6 variables are used in this model building stage for the simplicity.
+    split the train dataset(data/raw) and save it in the data/processed folder
+    input: config path 
+    output: save splitted files in output folder
     """
-    df = pd.read_csv(data_path, sep=",", encoding='utf-8')
-    df=df[model_var]
-    return df
-
-def load_raw_data(config_path):
-    """
-    load data from external location(data/external) to the raw folder(data/raw) with train and teting dataset 
-    input: config_path 
-    output: save train file in data/raw folder 
-    """
-    config=read_params(config_path)
-    external_data_path=config["external_data_config"]["external_data_csv"]
-    raw_data_path=config["raw_data_config"]["raw_data_csv"]
-    model_var=config["raw_data_config"]["model_var"]
+    config = read_params(config_path)
+    raw_data_path = config["raw_data_config"]["raw_data_csv"]
+    test_data_path = config["processed_data_config"]["test_data_csv"] 
+    train_data_path = config["processed_data_config"]["train_data_csv"]
+    split_ratio = config["raw_data_config"]["train_test_split_ratio"]
+    random_state = config["raw_data_config"]["random_state"]
+    raw_df=pd.read_csv(raw_data_path)
+    split_data(raw_df,train_data_path,test_data_path,split_ratio,random_state)
     
-    df=load_data(external_data_path,model_var)
-    df.to_csv(raw_data_path,index=False)
-    
-if __name__ == "__main__":
+if __name__=="__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
-    load_raw_data(config_path=parsed_args.config)
+    split_and_saved_data(config_path=parsed_args.config)
