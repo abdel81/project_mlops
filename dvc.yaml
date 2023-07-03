@@ -27,9 +27,9 @@ stages:
     - random_forest.n_estimators
 
   log_production_model:
-    cmd: python ../src/models/production_model_selection.py --config=params.yaml
+    cmd: python src/models/production_model_selection.py --config=params.yaml
     deps:
-    - ../src/models/production_model_selection.py
+    - src/models/production_model_selection.py
     params:
     - random_forest.max_depth
     - random_forest.n_estimators
