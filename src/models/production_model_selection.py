@@ -5,7 +5,6 @@ from pprint import pprint
 from train_model import read_params
 from mlflow.tracking import MlflowClient
 
-
 def log_production_model(config_path):
     config = read_params(config_path)
     mlflow_config = config["mlflow_config"] 
@@ -14,7 +13,7 @@ def log_production_model(config_path):
     remote_server_uri = mlflow_config["remote_server_uri"]
 
     mlflow.set_tracking_uri(remote_server_uri)
-    runs = mlflow.search_runs(experiment_ids="1")
+    runs = mlflow.search_runs(experiment_ids=1)
     max_accuracy = max(runs["metrics.accuracy"])
     max_accuracy_run_id = list(runs[runs["metrics.accuracy"] == max_accuracy]["run_id"])[0]
     
@@ -42,8 +41,8 @@ def log_production_model(config_path):
     loaded_model = mlflow.pyfunc.load_model(logged_model)
     joblib.dump(loaded_model, model_dir)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
-    log_production_model(config_path=parsed_args.config)
+    data = log_production_model(config_path=parsed_args.config)
