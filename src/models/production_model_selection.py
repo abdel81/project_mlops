@@ -39,10 +39,14 @@ def log_production_model(config_path):
                 stage="Staging"
             )        
 
-    loaded_model = mlflow.pyfunc.load_model(logged_model)
-    joblib.dump(loaded_model, model_dir)
+    try:
+        loaded_model = mlflow.pyfunc.load_model(logged_model)
+        joblib.dump(loaded_model, model_dir)
+    except UnboundLocalError as e:
+        print("Error: Failed to load the logged model. Make sure the 'logged_model' variable is properly assigned.")
+        print(e)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
