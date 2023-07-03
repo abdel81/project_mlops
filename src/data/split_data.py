@@ -1,3 +1,4 @@
+import os
 import argparse
 import pandas as pd
 from load_data import read_params
