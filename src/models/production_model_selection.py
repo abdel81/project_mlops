@@ -5,6 +5,7 @@ from pprint import pprint
 from train_model import read_params
 from mlflow.tracking import MlflowClient
 
+
 def log_production_model(config_path):
     config = read_params(config_path)
     mlflow_config = config["mlflow_config"] 
@@ -38,26 +39,10 @@ def log_production_model(config_path):
                 stage="Staging"
             )        
 
-    try:
-        loaded_model = None
-        if logged_model.startswith("runs:/"):
-            run_id = logged_model[6:]
-            logged_run = mlflow.get_run(run_id)
-            logged_artifacts = logged_run.to_dictionary()["data"]["artifact_uri"]
-            model_path = os.path.join(logged_artifacts, "model")
-            loaded_model = joblib.load(model_path)
-        else:
-            loaded_model = mlflow.pyfunc.load_model(logged_model)
-        
-        if loaded_model is not None:
-            joblib.dump(loaded_model, model_dir)
-        else:
-            raise Exception("Failed to load the logged model.")
-    except Exception as e:
-        print("Error: Failed to load the logged model.")
-        print(e)
+    loaded_model = mlflow.pyfunc.load_model(logged_model)
+    joblib.dump(loaded_model, model_dir)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
