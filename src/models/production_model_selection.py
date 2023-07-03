@@ -5,6 +5,7 @@ from pprint import pprint
 from train_model import read_params
 from mlflow.tracking import MlflowClient
 
+
 def log_production_model(config_path):
     config = read_params(config_path)
     mlflow_config = config["mlflow_config"] 
@@ -45,4 +46,4 @@ if __name__ == '__main__':
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
-    data = log_production_model(config_path=parsed_args.config)
+    log_production_model(config_path=parsed_args.config)
