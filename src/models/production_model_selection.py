@@ -42,7 +42,7 @@ def log_production_model(config_path):
     loaded_model = mlflow.pyfunc.load_model(logged_model)
     joblib.dump(loaded_model, model_dir)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
