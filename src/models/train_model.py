@@ -94,9 +94,8 @@ def train_and_evaluate(config_path):
                 registered_model_name=mlflow_config["registered_model_name"])
         else:
             mlflow.sklearn.load_model(model, "model")
- 
 if __name__=="__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
     parsed_args = args.parse_args()
-    train_and_evaluate(config_path=parsed_args.config)
+    data = train_and_evaluate(config_path=parsed_args.config)
